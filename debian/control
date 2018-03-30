@@ -1,0 +1,25 @@
+Source: papirus-icon-theme
+Section: universe/x11
+Priority: optional
+Maintainer: Sergei Eremenko <finalitik@gmail.com>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.8
+Homepage: https://github.com/PapirusDevelopmentTeam/papirus-icon-theme
+Bugs: https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/issues
+
+Package: papirus-icon-theme
+Architecture: all
+Depends: ${misc:Depends}, hicolor-icon-theme
+Suggests: filezilla-theme-papirus, libreoffice-style-papirus
+Replaces: papirus-gtk-icon-theme, papirus-kde-icon-theme
+Description: Papirus Icon Theme
+ Papirus is a SVG-based icon theme, drawing inspiration from Material Design
+ and flat design.
+ .
+ This package contains the following icon themes:
+  - ePapirus
+  - Papirus
+  - Papirus-Adapta
+  - Papirus-Adapta-Nokto
+  - Papirus-Dark
+  - Papirus-Light
