@@ -11,7 +11,7 @@ Package: qt-style-qsvgstyle-qt5
 Architecture: all
 Depends: ${misc:Depends}
 Description: SVG based Qt5 theme engine and tools suite.
-This package install the QSvgStyle engine, the theme builder and the theme manager.
-.
-QSvgStyle is a Qt5 style engine that tunes the appearance of Qt applications using SVG themes.
-It comes with a ThemeBuilder, a ThemeManager and a built-in SVG cleaner.
+ This package install the QSvgStyle engine, the theme builder and the theme manager.
+ .
+ QSvgStyle is a Qt5 style engine that tunes the appearance of Qt applications using SVG themes.
+ It comes with a ThemeBuilder, a ThemeManager and a built-in SVG cleaner.
