@@ -1,5 +1,4 @@
 #!/bin/sh
-# preinst script for papirus-icon-theme
 #
 # see: dh_installdeb(1)
 

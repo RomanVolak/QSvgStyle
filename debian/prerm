@@ -1,5 +1,4 @@
 #!/bin/sh
-# prerm script for papirus-icon-theme
 #
 # see: dh_installdeb(1)
 
@@ -20,7 +19,7 @@ case "$1" in
 	upgrade)
 		readonly NEW_VERSION="$2"
 		# shellcheck disable=SC2016
-		readonly PREV_VERSION="$(dpkg-query -f='${Version}' --show papirus-icon-theme)"
+		readonly PREV_VERSION="$(dpkg-query -f='${Version}' --show qt-style-qsvgstyle-qt5)"
 
 		if dpkg --compare-versions "$PREV_VERSION" gt "$NEW_VERSION"; then
 			cat >&2 <<- EOF
@@ -30,7 +29,7 @@ case "$1" in
 			We strongly do not recommend to downgrade this package in this way.
 			Please remove this package and then install it again:
 
-			  sudo apt-get remove papirus-icon-theme
+			  sudo apt-get remove qt-style-qsvgstyle-qt5
 
 			EOF
 		fi

@@ -1,25 +1,17 @@
-Source: papirus-icon-theme
+Source: qt-style-qsvgstyle-qt5
 Section: universe/x11
 Priority: optional
-Maintainer: Sergei Eremenko <finalitik@gmail.com>
+Maintainer: Saïd LANKRI <said.lankri@gmail.com>
 Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.8
-Homepage: https://github.com/PapirusDevelopmentTeam/papirus-icon-theme
-Bugs: https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/issues
+Homepage: https://github.com/DexterMagnific/QSvgStyle
+Bugs: https://github.com/DexterMagnific/QSvgStyle/issues
 
-Package: papirus-icon-theme
+Package: qt-style-qsvgstyle-qt5
 Architecture: all
-Depends: ${misc:Depends}, hicolor-icon-theme
-Suggests: filezilla-theme-papirus, libreoffice-style-papirus
-Replaces: papirus-gtk-icon-theme, papirus-kde-icon-theme
-Description: Papirus Icon Theme
- Papirus is a SVG-based icon theme, drawing inspiration from Material Design
- and flat design.
- .
- This package contains the following icon themes:
-  - ePapirus
-  - Papirus
-  - Papirus-Adapta
-  - Papirus-Adapta-Nokto
-  - Papirus-Dark
-  - Papirus-Light
+Depends: ${misc:Depends}
+Description: SVG based Qt5 theme engine and tools suite.
+This package install the QSvgStyle engine, the theme builder and the theme manager.
+.
+QSvgStyle is a Qt5 style engine that tunes the appearance of Qt applications using SVG themes.
+It comes with a ThemeBuilder, a ThemeManager and a built-in SVG cleaner.
