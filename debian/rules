@@ -10,13 +10,13 @@ else
 ARCH:=i386
 endif
 
-APPNAME := QSvgStyle
+APPNAME := qt-style-qsvgstyle-qt5
 
 builddir:
 	mkdir -p builddir
 
 builddir/Makefile: builddir
-	cd builddir && /usr/lib/$(ARCH)-linux-gnu/qt5/bin/qmake PREFIX=/usr ../$(APPNAME).pro
+	cd builddir && /usr/lib/$(ARCH)-linux-gnu/qt5/bin/qmake PREFIX=/usr ../QSvgStyle.pro
 
 build: build-stamp
 
