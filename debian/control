@@ -2,16 +2,27 @@ Source: qt-style-qsvgstyle-qt5
 Section: universe/x11
 Priority: optional
 Maintainer: Saïd LANKRI <said.lankri@gmail.com>
-Build-Depends: debhelper (>= 9)
+Build-Depends: debhelper (>= 9),
+               make,
+               qt5-qmake,
+               qtbase5-dev,
+               libqt5svg5-dev,
+               libqt5x11extras5-dev
 Standards-Version: 3.9.8
 Homepage: https://github.com/DexterMagnific/QSvgStyle
 Bugs: https://github.com/DexterMagnific/QSvgStyle/issues
 
 Package: qt-style-qsvgstyle-qt5
-Architecture: all
-Depends: ${misc:Depends}
+Architecture: any
+Depends: ${misc:Depends},
+         libqt5core5a,
+         libqt5xml5,
+         libqt5gui5,
+         libqt5widgets5,
+         libqt5svg5,
+         libqt5x11extras5
 Description: SVG based Qt5 theme engine and tools.
- This package install the QSvgStyle engine, the theme builder and the theme manager.
+ This package contains the QSvgStyle engine, the theme builder and the theme manager.
  .
  QSvgStyle is a Qt5 style engine that tunes the appearance of Qt applications using SVG themes.
  It comes with a ThemeBuilder, a ThemeManager and a built-in SVG cleaner.
