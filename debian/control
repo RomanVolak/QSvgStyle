@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: Saïd LANKRI <said.lankri@gmail.com>
 Build-Depends: debhelper (>= 9),
                make,
+               zlib1g-dev,
                qt5-qmake,
                qtbase5-dev,
                libqt5svg5-dev,
@@ -15,6 +16,7 @@ Bugs: https://github.com/DexterMagnific/QSvgStyle/issues
 Package: qt-style-qsvgstyle-qt5
 Architecture: any
 Depends: ${misc:Depends},
+         zlib1g-dev,
          libqt5core5a,
          libqt5xml5,
          libqt5gui5,
