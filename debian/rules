@@ -1,67 +1,87 @@
 #!/usr/bin/make -f
-# -*- makefile -*-
+# -*- mode: makefile-gmake; coding: utf-8 -*-
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+APPNAME                 ::= qt5-style-qsvgstyle
+BASH_PATH               ::= $(shell which bash)
+DEB_BUILD_MAINT_OPTIONS ::= hardening=+all
+DH_VERBOSE              ::= 1
+DOC_INSTALL_PATH        ::= usr/share/doc/qt5-style-qsvgstyle
+DPKG_EXPORT_BUILDFLAGS  ::= 1
+NUMJOBS                 ::= 1
+PLUGIN_INSTALL_DIR      ::= usr/lib/$(DEB_HOST_MULTIARCH)/qt5/plugins/styles
+QT_SELECT               ::= qt5
+SHELL                   ::= $(shell realpath -Leq $(BASH_PATH) || echo '/bin/sh')
+UBUNTUVER               ::= $(shell lsb_release -rs | cut -c-5)
 
-ifeq ($(DEB_BUILD_ARCH),amd64)
-ARCH:=x86_64
-else
-ARCH:=i386
+ifeq ($(shell dpkg-vendor --query Vendor),Ubuntu)
+ifneq ($(UBUNTUVER),$(shell printf "$(UBUNTUVER)\n17.10\n" | sort -g | head -1))
+	DEB_BUILD_MAINT_OPTIONS += future=+lfs
+	DPKG_EXPORT_BUILDTOOLS = 1
+    include /usr/share/dpkg/buildtools.mk
+endif
+ifneq ($(UBUNTUVER),$(shell printf "$(UBUNTUVER)\n19.04\n" | sort -g | head -1))
+	DEB_BUILD_MAINT_OPTIONS += reproducible=+fixfilepath
+endif
 endif
 
-APPNAME := qt-style-qsvgstyle-qt5
+include /usr/share/dpkg/default.mk
 
-builddir:
-	mkdir -p builddir
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+NUMJOBS ::= $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+endif
 
-builddir/Makefile: builddir
-	cd builddir && /usr/lib/$(ARCH)-linux-gnu/qt5/bin/qmake PREFIX=/usr ../QSvgStyle.pro
+ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
+	QMAKE ::= /usr/lib/qt5/bin/qmake
+else
+	QMAKE ::= $(DEB_HOST_GNU_TYPE)-qmake
+endif
 
-build: build-stamp
+export APPNAME DEB_BUILD_MAINT_OPTIONS DH_VERBOSE QMAKE QT_SELECT
 
-build-stamp: builddir/Makefile
-	dh_testdir
-	# Add here commands to compile the package.
-	cd builddir && $(MAKE)
-	touch $@
 
-clean:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp
-	# Add here commands to clean up after the build process.
-	rm -rf builddir
-	dh_clean
-install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
+%:
+	dh $@ -v -Sqmake --with sphinxdoc
 
-	# Add here commands to install the package into debian/your_appname
-	cd builddir && $(MAKE) INSTALL_ROOT=$(CURDIR)/debian/$(APPNAME) install && $(MAKE) distclean
 
-# Build architecture-independent files here.
-binary-indep: build install
-# We have nothing to do by default.
+override_dh_auto_build-indep:
+ifeq (,$(filter nodoc,$(DEB_BUILD_PROFILES) $(DEB_BUILD_OPTIONS)))
+	dh_auto_build -O-v -O-Smakefile -O-D$(CURDIR)/doc -O--with=sphinxdoc -- html
+endif
 
-# Build architecture-dependent files here.
-binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_installdocs
-	dh_installchangelogs
-	dh_installexamples
-	dh_installman
-	dh_link
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
+override_dh_auto_install-arch:
+	dh_auto_install -a -O-v -O-Sqmake
+	install -Dm0644 -t $(CURDIR)/debian/tmp/$(PLUGIN_INSTALL_DIR) \
+		$(CURDIR)/style/plugins/libqsvgstyle.so
+	install -d $(CURDIR)/debian/tmp/usr/share/QSvgStyle
+	find $(CURDIR)/themes/* -type d -execdir cp -Rf '{}' \
+		$(CURDIR)/debian/tmp/usr/share/QSvgStyle \;
+	rm -f $(CURDIR)/debian/tmp/usr/share/QSvgStyle/FlatShadowed/FlatShadowed.zip
 
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+override_dh_auto_install-indep:
+ifeq (,$(filter nodoc,$(DEB_BUILD_PROFILES) $(DEB_BUILD_OPTIONS)))
+	install -d \
+		$(CURDIR)/debian/tmp/$(DOC_INSTALL_PATH)
+	cp -Rf $(CURDIR)/doc/build/html \
+		$(CURDIR)/debian/tmp/$(DOC_INSTALL_PATH)
+endif
+
+override_dh_installdocs:
+ifeq (,$(filter nodoc,$(DEB_BUILD_PROFILES) $(DEB_BUILD_OPTIONS)))
+	dh_installdocs -O-v -O-Smakefile -O--with=sphinxdoc \
+		-pqt5-style-qsvgstyle-doc --doc-main-package=qt5-style-qsvgstyle -- \
+		$(CURDIR)/debian/tmp/$(DOC_INSTALL_PATH)/html/
+	dh_installdocs -O-v -O-Sqmake -O--with=sphinxdoc --remaining-packages
+else
+	dh_installdocs -O-v -O-Sqmake
+endif
+
+override_dh_sphinxdoc:
+ifeq (,$(filter nodoc,$(DEB_BUILD_PROFILES) $(DEB_BUILD_OPTIONS)))
+	dh_sphinxdoc -i -O-v -O-Smakefile -O--with=sphinxdoc \
+		-pqt5-style-qsvgstyle-doc -- $(DOC_INSTALL_PATH)/html/
+	rm -rf $(CURDIR)/debian/tmp/$(DOC_INSTALL_PATH)/html
+endif
+
+override_dh_shlibdeps:
+	dh_shlibdeps -a -O-v -O-Sqmake -O--with=sphinxdoc -- \
+		-l/lib/$(DEB_HOST_MULTIARCH)
